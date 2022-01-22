@@ -9,7 +9,7 @@ image:
   # -- image repository
   repository: markfarrell/rtl_433_prometheus
   # -- image tag
-  tag: 1.0.0
+  tag: 0.0.1
   # -- image pull policy
   pullPolicy: IfNotPresent
 
