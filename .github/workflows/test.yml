@@ -14,3 +14,14 @@ jobs:
           go-version: '1.14.0'
 
       - run: go test
+  package-helm-chart:
+    runs-on: ubuntu-latest
+
+    steps:
+      - uses: actions/checkout@v2
+
+      - name: Commit changes
+        uses: EndBug/add-and-commit@v8
+        with:
+          message: 'Add helm package'
+          add: charts/rtl-433-exporter-*.tgz
