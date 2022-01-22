@@ -1,8 +1,8 @@
 apiVersion: v2
-appVersion: 1.0.0
+appVersion: 0.0.2
 description: prometheus exporter for rtl_433
 name: rtl-433-exporter
-version: 1.0.0
+version: 0.0.2
 kubeVersion: ">=1.16.0-0"
 keywords:
 - rtl-433-exporter
