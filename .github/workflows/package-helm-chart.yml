@@ -1,0 +1,30 @@
+name: Pull Request
+on:
+  pull_request:
+    branches:
+      - master
+
+jobs:
+
+  package-helm-chart:
+    runs-on: ubuntu-latest
+
+    steps:
+      - uses: actions/checkout@v2
+
+      - name: Install Helm
+        uses: azure/setup-helm@v1
+        with:
+          version: v3.4.0
+
+      - name: Package helm chart
+        run: helm package -d charts/ charts/rtl-433-exporter/
+
+      - name: Rename chart
+        run: mv charts/rtl-433-exporter*.tgz charts/rtl-433-exporter.tgz
+
+      - name: Commit changes
+        uses: EndBug/add-and-commit@v8
+        with:
+          message: 'Add helm package'
+          add: charts/rtl-433-exporter.tgz
