@@ -1,2 +1,6 @@
 debug
 rtl_433_prometheus
+
+# Helm resources
+charts/**/Chart.lock
+charts/**/charts
