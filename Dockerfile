@@ -26,7 +26,8 @@ FROM debian:${DEBIAN_VERSION}
 RUN apt update && \
     apt upgrade && \
     apt install -y --no-install-recommends \
-        rtl-433 && \
+        rtl-433 \
+        udev && \
     rm -rf /var/lib/apt/lists/*
 
 WORKDIR /
