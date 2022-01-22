@@ -35,4 +35,4 @@ COPY --from=gobuilder /app/rtl_433_prometheus /
 
 EXPOSE 9550
 ENTRYPOINT ["/rtl_433_prometheus"]
-CMD ["--subprocess", "/rtl_433 -F json -M newmodel"]
+CMD ["--subprocess", "rtl_433 -F json -M newmodel"]
