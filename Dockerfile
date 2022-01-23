@@ -33,6 +33,12 @@ RUN apt update && \
 WORKDIR /
 COPY --from=gobuilder /app/rtl_433_prometheus /
 
+ENV FREQUENCY=433M
+ENV RTL_SDR_DEV_PATH=/dev/rtl_sdr
+ENV RTL_433_FLAGS=
+ENV MATCHERS=
+
+COPY entrypoint.sh /entrypoint.sh
+
 EXPOSE 9550
-ENTRYPOINT ["/rtl_433_prometheus"]
-CMD ["--subprocess", "rtl_433 -F json -M newmodel"]
+ENTRYPOINT ["/entrypoint.sh"]
