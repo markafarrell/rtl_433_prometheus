@@ -12,7 +12,7 @@ MATCHERS=${MATCHERS:=}
 
 SUBPROCESS="rtl_433 -F json -f $FREQUENCY $RTL_433_FLAGS"
 
-if [ -f "$RTL_SDR_DEV_PATH" ]; then
+if [ -e "$RTL_SDR_DEV_PATH" ]; then
     # Here we remap /dev/rtl_sdr to the correct path in /dev/bus/usb so rtl_433 can discover it correctly
 
     # Use udevadm to discover the BUSNUM and DEVNUM
