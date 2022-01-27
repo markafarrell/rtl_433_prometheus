@@ -100,6 +100,28 @@ Matchers:
 		},
 		labels,
 	)
+	rain = prometheus.NewGaugeVec(
+		prometheus.GaugeOpts{
+			Name: "rtl_433_rain_mm",
+			Help: "Rain in mm",
+		},
+		labels,
+	)
+	wind_speed = prometheus.NewGaugeVec(
+		prometheus.GaugeOpts{
+			Name: "rtl_433_wind_avg_km_h",
+			Help: "Average wind speed in km/h",
+		},
+		labels,
+	)
+	wind_direction = prometheus.NewGaugeVec(
+		prometheus.GaugeOpts{
+			Name: "rtl_433_wind_dir_deg",
+			Help: "Wind direction in degrees",
+		},
+		labels,
+	)
+
 )
 
 // Message is a single sensor observation: a single line of JSON input from $ rtl_433 -F json
@@ -132,6 +154,12 @@ type Message struct {
 	Power1W *int32 `json:"power1_W"`
 	// Power on channel 0 (Watts)
 	Power2W *int32 `json:"power2_W"`
+	// Rain in mm. Nil if not present in initial JSON.
+	RainMM *float64 `json:"rain_mm"`
+	// Wind Speed in km/h. Nil if not present in initial JSON.
+	WindSpeedKMH *int32 `json:"wind_avg_km_h"`
+	// Wind Direction in degrees. Nil if not present in initial JSON.
+	WindDirectionDeg *int32 `json:"wind_dir_deg"`
 }
 
 type locationMatcher struct {
@@ -262,6 +290,15 @@ func run(r io.Reader) error {
 		}
 		if p := msg.Power2W; p != nil {
 			watts.WithLabelValues(msg.Model, id, "2", location).Set(float64(*p))
+		}
+		if r := msg.RainMM; r != nil {
+			rain.WithLabelValues(labels...).Set(*r)
+		}
+		if ws := msg.WindSpeedKMH; ws != nil {
+			wind_speed.WithLabelValues(labels...).Set(float64(*ws))
+		}
+		if wd := msg.WindDirectionDeg; wd != nil {
+			wind_direction.WithLabelValues(labels...).Set(float64(*wd))
 		}
 	}
 	return scanner.Err()
