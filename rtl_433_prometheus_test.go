@@ -53,6 +53,7 @@ func TestParsingToMetrics(t *testing.T) {
 		rtl_433_temperature_celsius{channel="2",id="59",location="",model="Ambientweather-F007TH"} 33.166666666666664
 		rtl_433_temperature_celsius{channel="3",id="55",location="",model="Ecowitt-WH53"} 18
 		rtl_433_temperature_celsius{channel="A",id="7997",location="",model="Acurite-Tower"} 12.6
+		rtl_433_temperature_celsius{channel="",id="52451",location="",model="Holman-WS5029"} 22.6
 	`
 
 	if err := testutil.CollectAndCompare(temperature, strings.NewReader(wantTemperature), "rtl_433_temperature_celsius"); err != nil {
@@ -67,6 +68,7 @@ func TestParsingToMetrics(t *testing.T) {
 		rtl_433_humidity{channel="2",id="184",location="",model="Nexus-TH"} 0.55
 		rtl_433_humidity{channel="2",id="59",location="",model="Ambientweather-F007TH"} 0.35
 		rtl_433_humidity{channel="A",id="7997",location="",model="Acurite-Tower"} 0.91
+		rtl_433_humidity{channel="",id="52451",location="",model="Holman-WS5029"} 0.61
 	`
 	if err := testutil.CollectAndCompare(humidity, strings.NewReader(wantHumidity), "rtl_433_humidity"); err != nil {
 		t.Errorf("unexpected collecting result:\n%s", err)
@@ -81,6 +83,7 @@ func TestParsingToMetrics(t *testing.T) {
 		rtl_433_packets_received{channel="2",id="59",location="",model="Ambientweather-F007TH"} 1
 		rtl_433_packets_received{channel="3",id="55",location="",model="Ecowitt-WH53"} 1
 		rtl_433_packets_received{channel="A",id="7997",location="",model="Acurite-Tower"} 1
+		rtl_433_packets_received{channel="",id="52451",location="",model="Holman-WS5029"} 1
 	`
 	if err := testutil.CollectAndCompare(packetsReceived, strings.NewReader(wantPacketsReceived), "rtl_433_packets_received"); err != nil {
 		t.Errorf("unexpected collecting result:\n%s", err)
@@ -94,6 +97,33 @@ func TestParsingToMetrics(t *testing.T) {
 		rtl_433_battery{channel="A",id="7997",location="",model="Acurite-Tower"} 0
 	`
 	if err := testutil.CollectAndCompare(battery, strings.NewReader(wantBattery), "rtl_433_battery"); err != nil {
+		t.Errorf("unexpected collecting result:\n%s", err)
+	}
+
+	wantRain := `
+		# HELP rtl_433_rain_mm Rain in mm
+		# TYPE rtl_433_rain_mm gauge
+		rtl_433_rain_mm{channel="",id="52451",location="",model="Holman-WS5029"} 8.69
+	`
+	if err := testutil.CollectAndCompare(rain, strings.NewReader(wantRain), "rtl_433_rain_mm"); err != nil {
+		t.Errorf("unexpected collecting result:\n%s", err)
+	}
+
+	wantWindSpeed := `
+		# HELP rtl_433_wind_avg_km_h Average wind speed in km/h
+		# TYPE rtl_433_wind_avg_km_h gauge
+		rtl_433_wind_avg_km_h{channel="",id="52451",location="",model="Holman-WS5029"} 0
+	`
+	if err := testutil.CollectAndCompare(wind_speed, strings.NewReader(wantWindSpeed), "rtl_433_wind_avg_km_h"); err != nil {
+		t.Errorf("unexpected collecting result:\n%s", err)
+	}
+
+	wantWindDirection := `
+		# HELP rtl_433_wind_dir_deg Wind direction in degrees
+		# TYPE rtl_433_wind_dir_deg gauge
+		rtl_433_wind_dir_deg{channel="",id="52451",location="",model="Holman-WS5029"} 0
+	`
+	if err := testutil.CollectAndCompare(wind_direction, strings.NewReader(wantWindDirection), "rtl_433_wind_dir_deg"); err != nil {
 		t.Errorf("unexpected collecting result:\n%s", err)
 	}
 }

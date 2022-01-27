@@ -16,8 +16,8 @@ if [ -e "$RTL_SDR_DEV_PATH" ]; then
     # Here we remap /dev/rtl_sdr to the correct path in /dev/bus/usb so rtl_433 can discover it correctly
 
     # Use udevadm to discover the BUSNUM and DEVNUM
-    BUSNUM=$(udevadm info --name /dev/rtl_sdr | grep BUSNUM | awk -F = '{ print $2 }')
-    DEVNUM=$(udevadm info --name /dev/rtl_sdr | grep DEVNUM | awk -F = '{ print $2 }')
+    BUSNUM=$(udevadm info --name $RTL_SDR_DEV_PATH -a | sed -n 's/\s*ATTRS{busnum}==\"\([^\"]\+\)\"/\1/p' | head -n 1 | awk '{$1 = sprintf("%03d", $1); print}')
+    DEVNUM=$(udevadm info --name $RTL_SDR_DEV_PATH -a | sed -n 's/\s*ATTRS{devnum}==\"\([^\"]\+\)\"/\1/p' | head -n 1 | awk '{$1 = sprintf("%03d", $1); print}')
 
     DEVDIR=/dev/bus/usb/$BUSNUM
     DEVPATH=$DEVDIR/$DEVNUM
