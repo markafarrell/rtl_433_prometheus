@@ -240,6 +240,9 @@ func run(r io.Reader) error {
 			continue
 		}
 
+		msgJSON, err := json.Marshal(msg)
+		log.Printf("Received: %s", string(msgJSON))
+
 		channel, err := msg.Channel()
 		if err != nil {
 			log.Printf("Got message %v without a Channel, dropping: %v", msg, err)
@@ -292,12 +295,15 @@ func run(r io.Reader) error {
 			watts.WithLabelValues(msg.Model, id, "2", location).Set(float64(*p))
 		}
 		if r := msg.RainMM; r != nil {
+			log.Printf("Rain = %f for %v", *r, labels)
 			rain.WithLabelValues(labels...).Set(*r)
 		}
 		if ws := msg.WindSpeedKMH; ws != nil {
+			log.Printf("Wind Speed = %f for %v", float64(*ws), labels)
 			wind_speed.WithLabelValues(labels...).Set(float64(*ws))
 		}
 		if wd := msg.WindDirectionDeg; wd != nil {
+			log.Printf("Wind Direction = %f for %v", float64(*wd), labels)
 			wind_direction.WithLabelValues(labels...).Set(float64(*wd))
 		}
 	}
